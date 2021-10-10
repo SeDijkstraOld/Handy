@@ -9,7 +9,7 @@ import numpy as np
 import time
 import pyautogui
 from imutils import resize
-#test
+#test om tekijken
 
 def main(number, command):
     mpHands = mp.solutions.hands
