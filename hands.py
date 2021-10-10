@@ -8,8 +8,10 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import numpy as np
 import time
 import pyautogui
-from imutils import resize
-#test om tekijken
+import turtle
+
+
+# test om tekijken
 
 def main(number, command):
     mpHands = mp.solutions.hands
@@ -58,10 +60,10 @@ def main(number, command):
             countNumber += count(i[0], i[1])
         cv2.putText(image, str(countNumber), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
 
-    def back():
-        if pyautogui.leftClick([20, 20], [40, 40]):
-            cap.release()
-            cv2.destroyAllWindows()
+    # def back():
+    #     if cv2.EVENT_LBUTTONDOWN:
+    #         cap.release()
+    #         cv2.destroyAllWindows()
 
     def findDistance():
         punt1 = coordinates(4)
@@ -143,20 +145,19 @@ def main(number, command):
                         landmarks.append([lmx, lmy])
                         mpDraw.draw_landmarks(image, handslms,
                                               mpHands.HAND_CONNECTIONS)
+                    # back()
                     if command == "mouse":
                         moveMouse()
                     elif command == "sound":
                         setVolume()
                     else:
                         counting()
-
-                    # back()
-
             cv2.imshow('MediaPipe Hands', image)
             if cv2.waitKey(1) == ord('q'):
                 break
         cap.release()
         cv2.destroyAllWindows()
+
 
 # with mpHands.Hands(
 #         min_detection_confidence=0.5,

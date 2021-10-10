@@ -25,7 +25,7 @@ def frame0():
     tk.Label(fram0,
              text="Welkom bij deze app je kan hier verschillende functies met je hand bekijken als je niet weet hoe het werkt").place(
         y=40, x=0)
-    tk.Label(fram0, text="kan je op de tutorial klikken").place(y=60, x=0)
+    tk.Label(fram0, text="kan je op de tutorial klikken. Om een programma uit te gaan klik q").place(y=60, x=0)
     fram0.grid(row=0, column=0)
 
 
