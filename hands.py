@@ -82,11 +82,21 @@ def main(number, command):
         return
 
     def moveMouse():
+
+        start_point = (170, 140)
+        end_point = (470, 340)
+        start_pointButton = (20, 20)
+        end_pointButton = (40, 40)
+        color = (255, 0, 0)
+        thickness = 2
+        cv2.rectangle(image, start_point, end_point, color, thickness)
+        cv2.rectangle(image, start_pointButton, end_pointButton, color, thickness)
+
         coordinate = coordinates(12)
         # print(coordinate)
         # print(pyautogui.size())
-        coordinateBreedte = (coordinate[0] - 170) * 6.6
-        coordinateHoogte = (coordinate[1] - 140) * 5.4
+        coordinateBreedte = (coordinate[0] - 170) * 6.4
+        coordinateHoogte = (coordinate[1] - 140) * 5.4 *-1 + 1080
         if coordinateBreedte < 0:
             coordinateBreedte = 0
         if coordinateBreedte > 1920:
@@ -96,10 +106,11 @@ def main(number, command):
         if coordinateHoogte > 1080:
             coordinateBreedte = 1080
         eindCoordinate = (coordinateBreedte, coordinateHoogte)
-        pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1])
-        if coordinates(8) > coordinates(7):
-            pyautogui.leftClick(coordinate[0], coordinate[1])
-            print("Hello")
+        pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.05)
+        if coordinates(8)[1] < coordinates(7)[1]:
+            pyautogui.mouseDown(coordinateBreedte, coordinateHoogte)
+        else:
+            pyautogui.mouseUp()
 
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     wCam, hCam = 640, 480
@@ -121,14 +132,6 @@ def main(number, command):
             image.flags.writeable = False
             results = hands.process(image)
             image.flags.writeable = True
-            start_point = (170, 140)
-            end_point = (470, 340)
-            start_pointButton = (20, 20)
-            end_pointButton = (40, 40)
-            color = (255, 0, 0)
-            thickness = 2
-            cv2.rectangle(image, start_point, end_point, color, thickness)
-            cv2.rectangle(image, start_pointButton, end_pointButton, color, thickness)
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             if results.multi_hand_landmarks:
                 for handslms in results.multi_hand_landmarks:

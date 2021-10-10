@@ -1,18 +1,35 @@
 from tkinter import *
 import tkinter as tk
 import hands
+from time import sleep
 
 app = Tk(className="Handy app")
 app.geometry("600x700")
 x = 400
 
 
+
 def sound():
     hands.main(1, "sound")
 
 
+def canvas():
+    def myFunction(event):
+        x, y = event.x, event.y
+        if canvas.old_coords:
+            x1, y1 = canvas.old_coords
+            canvas.create_line(x, y, x1, y1)
+        canvas.old_coords = x, y
+    top = Toplevel()
+    top.title('Canvas')
+    canvas = tk.Canvas(top, bg="white", height=300, width=500)
+    canvas.pack()
+    canvas.old_coords = None
+    top.bind('<Motion>', myFunction)
+
+
 def mouse():
-    hands.main(2, "mouse")
+    hands.main(1, "mouse")
 
 
 def count():
@@ -33,7 +50,8 @@ def frame1():
     fram1 = tk.Frame(app, width=600, height=200, relief=SUNKEN, bd=10, bg='#3b74d1')
     tk.Label(fram1, text="Mouse", font=('Helvetica', 20, 'bold'), bg='#3b74d1').place(x=0)
     tk.Button(fram1, text="Move mouse", command=mouse, width=20).place(x=x, y=10)
-    tk.Button(fram1, text="Tutorial", command="tutorialMouse", width=20).place(x=x, y=50)
+    tk.Button(fram1, text="Open Canvas", command=canvas, width=20).place(x=x, y=50)
+    tk.Button(fram1, text="Tutorial", command="tutorialMouse", width=20).place(x=x, y=90)
     fram1.grid(row=1, column=0)
 
 
