@@ -32,7 +32,6 @@ def main(number, command):
     vol = 0
     volBar = 400
     volPer = 0
-    command = 0
 
     def coordinates(number):
         normalizedLandmark = handslms.landmark[number]
@@ -75,6 +74,7 @@ def main(number, command):
         return lengthHand
 
     def setVolume():
+        print("Hello world")
         length = findDistance()
         vol = np.interp(length, [0, 120], [minVol, maxVol])
         print(int(length), vol)
@@ -150,7 +150,7 @@ def main(number, command):
                         moveMouse()
                     elif command == "sound":
                         setVolume()
-                    else:
+                    elif command == "count":
                         counting()
             cv2.imshow('MediaPipe Hands', image)
             if cv2.waitKey(1) == ord('q'):

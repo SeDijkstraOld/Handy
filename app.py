@@ -7,7 +7,7 @@ app.geometry("600x700")
 x = 400
 
 
-def test():
+def sound():
     hands.main(1, "sound")
 
 
@@ -15,8 +15,8 @@ def mouse():
     hands.main(2, "mouse")
 
 
-def calculator():
-    hands.main(1, "calculator")
+def count():
+    hands.main(1, "count")
 
 
 def frame0():
@@ -40,7 +40,7 @@ def frame1():
 def frame2():
     fram2 = tk.Frame(app, width=600, height=200, relief=SUNKEN, bd=10, bg='#3b74d1')
     tk.Label(fram2, text="Sound", font=('Helvetica', 20, 'bold'), bg='#3b74d1').place(x=0)
-    tk.Button(fram2, text="Use sound", command=test, width=20).place(x=x, y=10)
+    tk.Button(fram2, text="Use sound", command=sound, width=20).place(x=x, y=10)
     tk.Button(fram2, text="Tutorial", command="tutorialSound", width=20).place(x=x, y=50)
     fram2.grid(row=2, column=0)
 
@@ -48,7 +48,7 @@ def frame2():
 def frame3():
     fram3 = tk.Frame(app, width=600, height=200, relief=SUNKEN, bd=10, bg='#3b74d1')
     tk.Label(fram3, text="Count", font=('Helvetica', 20, 'bold'), bg='#3b74d1').place(x=0)
-    tk.Button(fram3, text="Count", command=calculator, width=20).place(x=x, y=10)
+    tk.Button(fram3, text="Count", command=count, width=20).place(x=x, y=10)
     fram3.grid(row=3, column=0)
 
 
