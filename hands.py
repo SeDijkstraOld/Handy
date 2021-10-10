@@ -1,17 +1,11 @@
 import cv2
 import mediapipe as mp
-import math
-import keyboard
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import numpy as np
-import time
 import pyautogui
-import turtle
 
-
-# test om tekijken
 
 def main(number, command):
     mpHands = mp.solutions.hands
@@ -24,14 +18,9 @@ def main(number, command):
     interface = devices.Activate(
         IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = cast(interface, POINTER(IAudioEndpointVolume))
-    # volume.GetMute()
-    # volume.GetMasterVolumeLevel()
     volRange = volume.GetVolumeRange()
     minVol = volRange[0]
     maxVol = volRange[1]
-    vol = 0
-    volBar = 400
-    volPer = 0
 
     def coordinates(number):
         normalizedLandmark = handslms.landmark[number]
@@ -58,11 +47,6 @@ def main(number, command):
         for i in countingcoordinates:
             countNumber += count(i[0], i[1])
         cv2.putText(image, str(countNumber), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
-
-    # def back():
-    #     if cv2.EVENT_LBUTTONDOWN:
-    #         cap.release()
-    #         cv2.destroyAllWindows()
 
     def findDistance():
         punt1 = coordinates(4)
@@ -96,7 +80,7 @@ def main(number, command):
         # print(coordinate)
         # print(pyautogui.size())
         coordinateBreedte = (coordinate[0] - 170) * 6.4
-        coordinateHoogte = (coordinate[1] - 140) * 5.4 *-1 + 1080
+        coordinateHoogte = (coordinate[1] - 140) * 5.4 * -1 + 1080
         if coordinateBreedte < 0:
             coordinateBreedte = 0
         if coordinateBreedte > 1920:
@@ -160,53 +144,3 @@ def main(number, command):
                 break
         cap.release()
         cv2.destroyAllWindows()
-
-
-# with mpHands.Hands(
-#         min_detection_confidence=0.5,
-#         min_tracking_confidence=0.5,
-#         max_num_hands=1) as hands:
-#     while cap.isOpened():
-#         success, image = cap.read()
-#         if not success:
-#             print("Ignoring empty camera frame.")
-#             # If loading a video, use 'break' instead of 'continue'.
-#             continue
-#
-#         image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
-#         image.flags.writeable = False
-#         results = hands.process(image)
-#         image.flags.writeable = True
-#         start_point = (170, 80)
-#         end_point = (470, 300)
-#         color = (255, 0, 0)
-#         thickness = 2
-#         cv2.rectangle(image, start_point, end_point, color, thickness)
-#         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-#         if results.multi_hand_landmarks:
-#             for handslms in results.multi_hand_landmarks:
-#                 for lm in handslms.landmark:
-#                     landmarks = []
-#                     mpDraw.draw_landmarks(
-#                         image,
-#                         handslms,
-#                         mpHands.HAND_CONNECTIONS,
-#                         mpStyles.get_default_hand_landmarks_style(),
-#                         mpStyles.get_default_hand_connections_style())
-#                     lmx = int(lm.x * wCam)
-#                     lmy = int(lm.y * hCam)
-#                     landmarks.append([lmx, lmy])
-#                     mpDraw.draw_landmarks(image, handslms,
-#                                           mpHands.HAND_CONNECTIONS)
-#             # if keyboard.is_pressed("s"):
-#             #     number = number + number1
-#             # if number != 1:
-#             #     number = 0
-#             # else:
-#             # setVolume()
-#             moveMouse()
-#         cv2.imshow('MediaPipe Hands', image)
-#         if cv2.waitKey(1) == ord('q'):
-#             break
-#     cap.release()
-#     cv2.destroyAllWindows()

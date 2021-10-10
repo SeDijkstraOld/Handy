@@ -1,12 +1,10 @@
 from tkinter import *
 import tkinter as tk
 import hands
-from time import sleep
 
 app = Tk(className="Handy app")
 app.geometry("600x700")
 x = 400
-
 
 
 def sound():
@@ -20,6 +18,7 @@ def canvas():
             x1, y1 = canvas.old_coords
             canvas.create_line(x, y, x1, y1)
         canvas.old_coords = x, y
+
     top = Toplevel()
     top.title('Canvas')
     canvas = tk.Canvas(top, bg="white", height=300, width=500)
