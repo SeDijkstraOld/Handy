@@ -66,7 +66,6 @@ def main(number, command):
         return
 
     def moveMouse():
-
         start_point = (170, 140)
         end_point = (470, 340)
         start_pointButton = (20, 20)
@@ -75,10 +74,7 @@ def main(number, command):
         thickness = 2
         cv2.rectangle(image, start_point, end_point, color, thickness)
         cv2.rectangle(image, start_pointButton, end_pointButton, color, thickness)
-
         coordinate = coordinates(12)
-        # print(coordinate)
-        # print(pyautogui.size())
         coordinateBreedte = (coordinate[0] - 170) * 6.4
         coordinateHoogte = (coordinate[1] - 140) * 5.4 * -1 + 1080
         if coordinateBreedte < 0:
@@ -91,7 +87,7 @@ def main(number, command):
             coordinateBreedte = 1080
         eindCoordinate = (coordinateBreedte, coordinateHoogte)
         pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.05)
-        if coordinates(8)[1] < coordinates(7)[1]:
+        if coordinates(4)[0] > coordinates(2)[0]:
             pyautogui.mouseDown(coordinateBreedte, coordinateHoogte)
         else:
             pyautogui.mouseUp()
