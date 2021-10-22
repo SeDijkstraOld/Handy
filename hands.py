@@ -29,17 +29,18 @@ def main(number, command):
         return pixelCoordinatesLandmark
 
     def count(coordinates1, coordinates2):
-        if coordinates2 == 4:
-            if coordinates(coordinates1)[0] > coordinates(coordinates2)[0]:
-                numberCount = 1
+        if coordinates(coordinates1) and coordinates(coordinates2):
+            if coordinates2 == 4:
+                if coordinates(coordinates1)[0] > coordinates(coordinates2)[0]:
+                    numberCount = 1
+                else:
+                    numberCount = 0
             else:
-                numberCount = 0
-        else:
-            if coordinates(coordinates1)[1] > coordinates(coordinates2)[1]:
-                numberCount = 1
-            else:
-                numberCount = 0
-        return numberCount
+                if coordinates(coordinates1)[1] > coordinates(coordinates2)[1]:
+                    numberCount = 1
+                else:
+                    numberCount = 0
+            return numberCount
 
     def counting():
         countNumber = 0
@@ -49,13 +50,14 @@ def main(number, command):
         cv2.putText(image, str(countNumber), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
 
     def findDistance():
-        punt1 = coordinates(4)
-        punt2 = coordinates(8)
-        lengthHand = punt2[0] - punt1[0]
-        if lengthHand < 0:
-            lengthHand = lengthHand * -1
+        if coordinates(4) and coordinates(8):
+            punt1 = coordinates(4)
+            punt2 = coordinates(8)
+            lengthHand = punt2[0] - punt1[0]
+            if lengthHand < 0:
+                lengthHand = lengthHand * -1
 
-        return lengthHand
+            return lengthHand
 
     def setVolume():
         print("Hello world")
@@ -66,31 +68,32 @@ def main(number, command):
         return
 
     def moveMouse():
-        start_point = (170, 140)
-        end_point = (470, 340)
-        start_pointButton = (20, 20)
-        end_pointButton = (40, 40)
-        color = (255, 0, 0)
-        thickness = 2
-        cv2.rectangle(image, start_point, end_point, color, thickness)
-        cv2.rectangle(image, start_pointButton, end_pointButton, color, thickness)
-        coordinate = coordinates(12)
-        coordinateBreedte = (coordinate[0] - 170) * 6.4
-        coordinateHoogte = (coordinate[1] - 140) * 5.4 * -1 + 1080
-        if coordinateBreedte < 0:
-            coordinateBreedte = 0
-        if coordinateBreedte > 1920:
-            coordinateBreedte = 1920
-        if coordinateHoogte < 0:
-            coordinateHoogte = 0
-        if coordinateHoogte > 1080:
-            coordinateBreedte = 1080
-        eindCoordinate = (coordinateBreedte, coordinateHoogte)
-        pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.05)
-        if coordinates(4)[0] > coordinates(2)[0]:
-            pyautogui.mouseDown(coordinateBreedte, coordinateHoogte)
-        else:
-            pyautogui.mouseUp()
+        if coordinates(12) and coordinates(4) and coordinates(2):
+            start_point = (170, 140)
+            end_point = (470, 340)
+            start_pointButton = (20, 20)
+            end_pointButton = (40, 40)
+            color = (255, 0, 0)
+            thickness = 2
+            cv2.rectangle(image, start_point, end_point, color, thickness)
+            cv2.rectangle(image, start_pointButton, end_pointButton, color, thickness)
+            coordinate = coordinates(12)
+            coordinateBreedte = (coordinate[0] - 170) * 6.4
+            coordinateHoogte = (coordinate[1] - 140) * 5.4 * -1 + 1080
+            if coordinateBreedte < 0:
+                coordinateBreedte = 0
+            if coordinateBreedte > 1920:
+                coordinateBreedte = 1920
+            if coordinateHoogte < 0:
+                coordinateHoogte = 0
+            if coordinateHoogte > 1080:
+                coordinateBreedte = 1080
+            eindCoordinate = (coordinateBreedte, coordinateHoogte)
+            pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.05)
+            if coordinates(4)[0] > coordinates(2)[0]:
+                pyautogui.mouseDown(coordinateBreedte, coordinateHoogte)
+            else:
+                pyautogui.mouseUp()
 
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     wCam, hCam = 640, 480
@@ -140,3 +143,4 @@ def main(number, command):
                 break
         cap.release()
         cv2.destroyAllWindows()
+

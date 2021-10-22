@@ -4,6 +4,7 @@ import hands
 
 app = Tk(className="Handy app")
 app.geometry("600x700")
+app.resizable(0,0)
 x = 400
 
 
