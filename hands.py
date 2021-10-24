@@ -1,19 +1,17 @@
 import cv2
-import mediapipe as mp
 from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import numpy as np
+import mediapipe as mp
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from comtypes import CLSCTX_ALL
 import pyautogui
+
 
 
 def main(number, command):
     mpHands = mp.solutions.hands
-    mpLandmarks = mp.solutions.hands.HandLandmark
-    hands = mpHands.Hands()
     mpDraw = mp.solutions.drawing_utils
     mpStyles = mp.solutions.drawing_styles
-
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(
         IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
@@ -21,6 +19,11 @@ def main(number, command):
     volRange = volume.GetVolumeRange()
     minVol = volRange[0]
     maxVol = volRange[1]
+
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    wCam, hCam = 1160, 900
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, wCam)
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, hCam)
 
     def coordinates(number):
         normalizedLandmark = handslms.landmark[number]
@@ -55,7 +58,7 @@ def main(number, command):
         lengthHand = punt2[0] - punt1[0]
         if lengthHand < 0:
             lengthHand = lengthHand * -1
-        return lengthHand/1.5
+        return lengthHand/2
 
     def setVolume():
         if coordinates(4) and coordinates(8):
@@ -67,14 +70,14 @@ def main(number, command):
 
     def moveMouse():
         if coordinates(12) and coordinates(4) and coordinates(8):
-            start_point = (100, 100)
-            end_point = (1060, 640)
+            start_point = (100, 240)
+            end_point = (1060, 780)
             color = (255, 0, 0)
             thickness = 2
             cv2.rectangle(image, start_point, end_point, color, thickness)
             coordinate = coordinates(12)
             coordinateBreedte = (coordinate[0] - 100) * 2
-            coordinateHoogte = (coordinate[1] - 150) * 2 * -1 + 1080
+            coordinateHoogte = (coordinate[1] - 240) * 2 * -1 + 1080
             if coordinateBreedte < 0:
                 coordinateBreedte = 0
             if coordinateBreedte > 1920:
@@ -84,18 +87,13 @@ def main(number, command):
             if coordinateHoogte > 1080:
                 coordinateBreedte = 1080
             eindCoordinate = (coordinateBreedte, coordinateHoogte)
-            pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.005)
+            pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.01)
             if coordinates(4)[0] > coordinates(8)[0]:
                 pyautogui.mouseDown(coordinateBreedte, coordinateHoogte)
             else:
                 pyautogui.mouseUp()
         else:
             pyautogui.mouseUp()
-
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    wCam, hCam = 1160, 840
-    cap.set(3, wCam)
-    cap.set(4, hCam)
 
     with mpHands.Hands(
             min_detection_confidence=0.5,
@@ -109,6 +107,7 @@ def main(number, command):
                 continue
             run_once = int
             image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
+            image = cv2.resize(image, (1160,900))
             image.flags.writeable = False
             results = hands.process(image)
             image.flags.writeable = True
@@ -133,10 +132,8 @@ def main(number, command):
                         # cv2.resize(image, (1000, 1000))
                         moveMouse()
                     elif command == "sound":
-                        run_once = 1
                         setVolume()
                     elif command == "count":
-                        run_once = 1
                         counting()
             cv2.imshow('MediaPipe Hands', image)
             if cv2.waitKey(1) == ord('q'):
