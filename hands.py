@@ -50,36 +50,31 @@ def main(number, command):
         cv2.putText(image, str(countNumber), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
 
     def findDistance():
-        if coordinates(4) and coordinates(8):
-            punt1 = coordinates(4)
-            punt2 = coordinates(8)
-            lengthHand = punt2[0] - punt1[0]
-            if lengthHand < 0:
-                lengthHand = lengthHand * -1
-
-            return lengthHand
+        punt1 = coordinates(4)
+        punt2 = coordinates(8)
+        lengthHand = punt2[0] - punt1[0]
+        if lengthHand < 0:
+            lengthHand = lengthHand * -1
+        return lengthHand/1.5
 
     def setVolume():
-        print("Hello world")
-        length = findDistance()
-        vol = np.interp(length, [0, 120], [minVol, maxVol])
-        print(int(length), vol)
-        volume.SetMasterVolumeLevel(vol, None)
-        return
+        if coordinates(4) and coordinates(8):
+            length = findDistance()
+            vol = np.interp(length, [0, 120], [minVol, maxVol])
+            print(int(length), vol)
+            volume.SetMasterVolumeLevel(vol, None)
+            return
 
     def moveMouse():
-        if coordinates(12) and coordinates(4) and coordinates(2):
-            start_point = (170, 140)
-            end_point = (470, 340)
-            start_pointButton = (20, 20)
-            end_pointButton = (40, 40)
+        if coordinates(12) and coordinates(4) and coordinates(8):
+            start_point = (100, 100)
+            end_point = (1060, 640)
             color = (255, 0, 0)
             thickness = 2
             cv2.rectangle(image, start_point, end_point, color, thickness)
-            cv2.rectangle(image, start_pointButton, end_pointButton, color, thickness)
             coordinate = coordinates(12)
-            coordinateBreedte = (coordinate[0] - 170) * 6.4
-            coordinateHoogte = (coordinate[1] - 140) * 5.4 * -1 + 1080
+            coordinateBreedte = (coordinate[0] - 100) * 2
+            coordinateHoogte = (coordinate[1] - 150) * 2 * -1 + 1080
             if coordinateBreedte < 0:
                 coordinateBreedte = 0
             if coordinateBreedte > 1920:
@@ -89,14 +84,16 @@ def main(number, command):
             if coordinateHoogte > 1080:
                 coordinateBreedte = 1080
             eindCoordinate = (coordinateBreedte, coordinateHoogte)
-            pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.05)
-            if coordinates(4)[0] > coordinates(2)[0]:
+            pyautogui.moveTo(eindCoordinate[0], eindCoordinate[1], 0.005)
+            if coordinates(4)[0] > coordinates(8)[0]:
                 pyautogui.mouseDown(coordinateBreedte, coordinateHoogte)
             else:
                 pyautogui.mouseUp()
+        else:
+            pyautogui.mouseUp()
 
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    wCam, hCam = 640, 480
+    wCam, hCam = 1160, 840
     cap.set(3, wCam)
     cap.set(4, hCam)
 
@@ -110,7 +107,7 @@ def main(number, command):
                 print("Ignoring empty camera frame.")
                 # If loading a video, use 'break' instead of 'continue'.
                 continue
-
+            run_once = int
             image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
             image.flags.writeable = False
             results = hands.process(image)
@@ -133,14 +130,16 @@ def main(number, command):
                                               mpHands.HAND_CONNECTIONS)
                     # back()
                     if command == "mouse":
+                        # cv2.resize(image, (1000, 1000))
                         moveMouse()
                     elif command == "sound":
+                        run_once = 1
                         setVolume()
                     elif command == "count":
+                        run_once = 1
                         counting()
             cv2.imshow('MediaPipe Hands', image)
             if cv2.waitKey(1) == ord('q'):
                 break
         cap.release()
         cv2.destroyAllWindows()
-
