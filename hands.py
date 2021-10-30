@@ -1,11 +1,12 @@
 import cv2
 from ctypes import cast, POINTER
+
+import keyboard
 import numpy as np
 import mediapipe as mp
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 import pyautogui
-
 
 
 def main(number, command):
@@ -22,6 +23,8 @@ def main(number, command):
 
     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
     wCam, hCam = 1160, 900
+    activated = 0
+
     # cap.set(cv2.CAP_PROP_FRAME_WIDTH, wCam)
     # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, hCam)
 
@@ -49,7 +52,8 @@ def main(number, command):
         countNumber = 0
         countingcoordinates = [[3, 4], [6, 8], [10, 12], [14, 16], [18, 20]]
         for i in countingcoordinates:
-            countNumber += count(i[0], i[1])
+            if coordinates(i[0]) and coordinates(i[1]):
+                countNumber += count(i[0], i[1])
         cv2.putText(image, str(countNumber), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
 
     def findDistance():
@@ -58,7 +62,7 @@ def main(number, command):
         lengthHand = punt2[0] - punt1[0]
         if lengthHand < 0:
             lengthHand = lengthHand * -1
-        return lengthHand/2
+        return lengthHand / 2
 
     def setVolume():
         if coordinates(4) and coordinates(8):
@@ -105,13 +109,22 @@ def main(number, command):
                 print("Ignoring empty camera frame.")
                 # If loading a video, use 'break' instead of 'continue'.
                 continue
-            run_once = int
+            if keyboard.is_pressed('space'):
+                if activated == 1:
+                    activated = 0
+                else:
+                    activated = 1
             image = cv2.cvtColor(cv2.flip(image, 1), cv2.COLOR_BGR2RGB)
-            image = cv2.resize(image, (1160,900))
+            image = cv2.resize(image, (1160, 900))
             image.flags.writeable = False
             results = hands.process(image)
             image.flags.writeable = True
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            if activated == 0:
+                cv2.putText(image, "Om het programma te activeren klik op spatie, om te beeindigen", (10, 800),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                cv2.putText(image, "klik weer op spatie",
+                            (10, 850), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             if results.multi_hand_landmarks:
                 for handslms in results.multi_hand_landmarks:
                     for lm in handslms.landmark:
@@ -128,13 +141,13 @@ def main(number, command):
                         mpDraw.draw_landmarks(image, handslms,
                                               mpHands.HAND_CONNECTIONS)
                     # back()
-                    if command == "mouse":
-                        # cv2.resize(image, (1000, 1000))
-                        moveMouse()
-                    elif command == "sound":
-                        setVolume()
-                    elif command == "count":
-                        counting()
+                    if activated == 1:
+                        if command == "mouse":
+                            moveMouse()
+                        elif command == "sound":
+                            setVolume()
+                        elif command == "count":
+                            counting()
             cv2.imshow('MediaPipe Hands', image)
             if cv2.waitKey(1) == ord('q'):
                 break
